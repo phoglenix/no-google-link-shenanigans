@@ -23,11 +23,16 @@ function rewriteUrl(e) {
     if(a && a.localName == "a") {
         var m = a.getAttribute("onmousedown");
         var h = a.getAttribute("href");
+        var oh = a.getAttribute("originalhref")
         //var ja = a.getAttribute("jsaction");
+        //console.log('m=' + m + ' h=' + h + ' oh=' + oh + ' ja=' + ja);
         if(m && m.indexOf("return") == 0) {
             a.removeAttribute("onmousedown");
+        } else if(oh) {
+            a.setAttribute('href', oh);
         } else if(h) {
             if(h.indexOf("http://") == 0) h = h.substr(h.indexOf("/", 7));
+            if(h.indexOf("https://") == 0) h = h.substr(h.indexOf("/", 8));
             if(h.indexOf("/url?") == 0) {
                 h = h.substr(5).toObj();
                 a.setAttribute('href', decodeURIComponent(h.url || h.q));
